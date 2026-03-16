@@ -7,7 +7,7 @@ const saveNoteBtn = document.getElementById('save-note-btn');
 
 const noteDisplayStates = ['Idle', 'Editing', 'Creating'];
 let currentNoteDisplayState = 'idle';
-let currentNoteTitle = ''
+let currentNoteID = 0;
 
 let idNum = 2;
 
@@ -25,7 +25,7 @@ function loadNote(id){
 
     noteTitleEl.value = note.title;
     noteBodyEl.value = note.body;
-    updateCurrentNoteTitle()
+    updateCurrentNoteID(note.id)
 
     currentNoteDisplayState = 'Editing'
 }
@@ -66,17 +66,17 @@ function createNewNote(){
     idNum++;
 
     notes.push({title: noteTitle, body: noteBody, id:id, date: date});
-    updateCurrentNoteTitle();
+    updateCurrentNoteID(id);
     updateNotes();
     currentNoteDisplayState = 'Editing';
 }
 
-function checkForDuplicateNoteTitles(title){
+function checkForDuplicateNoteTitles(title, id){
     console.log('this function is running')
     let hasDuplicates = false;
     notes.forEach(note => {
         console.log(title, note.title)
-        if(note.title === currentNoteTitle){
+        if(note.id === id){
             return;
         } else {
             if(note.title === title){
@@ -85,24 +85,25 @@ function checkForDuplicateNoteTitles(title){
         }
         
     })
+    console.log(hasDuplicates)
     return hasDuplicates;
 }
 
 function saveNoteChanges(){
-    const noteIndex = getNoteIndex(currentNoteTitle);
+    const noteIndex = getNoteIndex(currentNoteID);
 
-    if(checkForDuplicateNoteTitles(noteTitleEl.value)){
+    if(checkForDuplicateNoteTitles(noteTitleEl.value, notes[noteIndex])){
         return;
     }
     notes[noteIndex].title = noteTitleEl.value;
     notes[noteIndex].body = noteBodyEl.value;
-    updateCurrentNoteTitle()
+    updateCurrentNoteID(notes[noteIndex].id)
     updateNotes(); 
     currentNoteDisplayState = 'Editing';
 }
 
-function updateCurrentNoteTitle(){
-    currentNoteTitle = noteTitleEl.value;
+function updateCurrentNoteID(id){
+    currentNoteID = id;
 }
 
 function saveNote(){
