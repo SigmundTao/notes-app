@@ -67,6 +67,20 @@ function createBlankNote(){
     currentNoteDisplayState = 'Creating';
 }
 
+function saveNoteChanges(){
+    const noteIndex = getNoteIndex(currentNoteID);
+    if(noteIndex === -1) return console.log('note not found, currentNoteID:', currentNoteID)
+    if(checkForDuplicateNoteTitles(noteTitleEl.value, notes[noteIndex].id)){
+        return;
+    }
+    notes[noteIndex].title = noteTitleEl.value;
+    notes[noteIndex].body = noteBodyEl.value;
+    updateCurrentNoteID(notes[noteIndex].id)
+    updateNoteData()
+    renderSidebarNoteCards(); 
+    currentNoteDisplayState = 'Editing';
+}
+
 function createOrEdit(){
     if(currentNoteDisplayState === 'Creating') createNewNote();
     if(currentNoteDisplayState === 'Editing') saveNoteChanges();
@@ -88,10 +102,8 @@ function createNewNote(){
 }
 
 function checkForDuplicateNoteTitles(title, id){
-    console.log('this function is running')
     let hasDuplicates = false;
     notes.forEach(note => {
-        console.log(title, note.title)
         if(note.id === id){
             return;
         } else {
@@ -101,22 +113,7 @@ function checkForDuplicateNoteTitles(title, id){
         }
         
     })
-    console.log(hasDuplicates)
     return hasDuplicates;
-}
-
-function saveNoteChanges(){
-    const noteIndex = getNoteIndex(currentNoteID);
-
-    if(checkForDuplicateNoteTitles(noteTitleEl.value, notes[noteIndex])){
-        return;
-    }
-    notes[noteIndex].title = noteTitleEl.value;
-    notes[noteIndex].body = noteBodyEl.value;
-    updateCurrentNoteID(notes[noteIndex].id)
-    updateNoteData()
-    renderSidebarNoteCards(); 
-    currentNoteDisplayState = 'Editing';
 }
 
 function updateCurrentNoteID(id){
@@ -134,6 +131,3 @@ saveNoteBtn.addEventListener('click', createOrEdit);
 noteTitleEl.value = '';
 noteBodyEl.value = '';
 renderSidebarNoteCards()
-
-
-console.log(notes)
