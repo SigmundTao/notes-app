@@ -11,9 +11,11 @@ let currentNoteID = 0;
 
 let idNum = 2;
 
-const notes = [{title: 'note1', body:'This is the first note in this app', date:'16-03-2026', id:'1'},
-    {title: 'note2', body:'this is the second note in the app', date:'16-03-2026', id:'2'}
-]
+const notes = JSON.parse(localStorage.getItem('notes')) || [];
+
+function updateNoteData(){
+    localStorage.setItem('notes', JSON.stringify(notes));
+}
 
 function getNoteIndex(id){
     return notes.findIndex(i => i.id === id);
@@ -41,7 +43,7 @@ function createSidebarNoteCard(title, date, containerEl, noteID){
     containerEl.appendChild(sidebarNoteCard)
 }
 
-function updateNotes(){
+function renderSidebarNoteCards(){
     sidebarEl.innerHTML = '';
     notes.forEach(note => createSidebarNoteCard(note.title, note.date, sidebarEl, note.id));
 }
@@ -66,8 +68,9 @@ function createNewNote(){
     idNum++;
 
     notes.push({title: noteTitle, body: noteBody, id:id, date: date});
+    updateNoteData()
     updateCurrentNoteID(id);
-    updateNotes();
+    renderSidebarNoteCards();
     currentNoteDisplayState = 'Editing';
 }
 
@@ -98,7 +101,8 @@ function saveNoteChanges(){
     notes[noteIndex].title = noteTitleEl.value;
     notes[noteIndex].body = noteBodyEl.value;
     updateCurrentNoteID(notes[noteIndex].id)
-    updateNotes(); 
+    updateNoteData()
+    renderSidebarNoteCards(); 
     currentNoteDisplayState = 'Editing';
 }
 
@@ -116,4 +120,7 @@ saveNoteBtn.addEventListener('click', createOrEdit);
 
 noteTitleEl.value = '';
 noteBodyEl.value = '';
-updateNotes()
+renderSidebarNoteCards()
+
+
+console.log(notes)
