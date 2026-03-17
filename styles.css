@@ -17,9 +17,20 @@ body {
     width: 100vw;
 }
 
+input {
+    background-color: var(--primary);
+    border: none;
+}
+
 button {
     background-color: var(--tertiary);
     border: none;
+}
+
+.delete-note-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
 }
 
 #sidebar {
@@ -42,10 +53,12 @@ button {
 
 .note-card {
     border: 1px solid black;
-    border-radius: var(--border-radius);
     padding: 5px;
     position: relative;
-    height: 20%;
+    height: 15%;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
 }
 
 .note-card:hover {
@@ -86,7 +99,7 @@ button {
 }
 
 .note-card-bookmark {
-    height: 30%;
+    height: 20%;
     aspect-ratio: 1;
     position: absolute;
     right: 15px;
@@ -203,4 +216,8 @@ button {
 
 #count-holder * {
     color: var(--secondary);
+}
+
+#categories {
+    height: 5%;
 }

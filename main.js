@@ -65,7 +65,7 @@ function createSidebarNoteCard(title, date, containerEl, noteID, bookmarked){
     const sidebarNoteCard = document.createElement('div');
     sidebarNoteCard.classList.add('note-card')
     sidebarNoteCard.innerHTML = `
-        <h2>${title}</h2>
+        <h4>${title}</h4>
         <p>${date}</p>
     `;
      
@@ -178,7 +178,6 @@ function saveNote(){
 }
 
 createNewNoteBtn.addEventListener('click', createBlankNote);
-saveNoteBtn.addEventListener('click', createOrEdit);
 
 //search functionality
 const searchMenu = document.getElementById('search-menu');
@@ -263,6 +262,7 @@ noteBodyEl.addEventListener('input', () => {
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => {
         updateWordCount()
+        createOrEdit()
     },300)
 })
 
