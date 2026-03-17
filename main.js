@@ -51,7 +51,13 @@ function loadNote(id){
     noteBodyEl.value = note.body;
     updateCurrentNoteID(note.id)
 
-    currentNoteDisplayState = 'Editing'
+    currentNoteDisplayState = 'Editing';
+
+    const noteCards = document.querySelectorAll('.note-card')
+    noteCards.forEach(card => {
+        card.classList.remove('selected-note')
+    })
+    noteCards[noteIndex].classList.add('selected-note');    
 }
 
 function createSidebarNoteCard(title, date, containerEl, noteID, bookmarked){
@@ -186,11 +192,31 @@ window.addEventListener('keydown', (e) => {
     } else if(e.altKey && e.key === 'n'){
         e.preventDefault()
         createBlankNote()
+    //cycle through notes using alt + upArrow/downArrow
+    } else if(e.altKey && e.key === 'ArrowDown'){
+        if(currentNoteID === 0){
+            loadNote(notes[0].id)
+        } else {
+            const nextIndex = getNoteIndex(currentNoteID) + 1; 
+            if(nextIndex > notes.length -1) return;
+            loadNote(notes[nextIndex].id);
+        }
+    } else if(e.altKey && e.key === 'ArrowUp'){
+        if(currentNoteID === 0){
+            loadNote(notes[notes.length - 1].id)
+        } else {
+            const prevIndex = getNoteIndex(currentNoteID) - 1;
+            if(prevIndex < 0) return;
+            loadNote(notes[prevIndex].id);
+        }
     }
 })
+
 bookmarkNavBtn.addEventListener('click', showBookmarkedNotes);
 displayAllNotesBtn.addEventListener('click', showAllNotes);
 
+
+window.addEventListener('keydown', (e) => {console.log(e.key)})
 noteTitleEl.value = '';
 noteBodyEl.value = '';
 renderSidebarNoteCards()
