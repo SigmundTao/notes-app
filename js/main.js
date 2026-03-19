@@ -5,6 +5,7 @@ import { initSearch } from './search.js'
 import { initShortcuts } from './shortcuts.js'
 import { showBookmarkedNotes, showAllNotes } from './bookmarks.js'
 import { updateEditorVisibility } from './state.js'
+import { initPermSidebar } from './permsidebar.js'
 
 const bookmarkNavBtn = document.getElementById('bookmark-nav-item')
 const displayAllNotesBtn = document.getElementById('all-notes-btn')
@@ -17,5 +18,6 @@ updateEditorVisibility()
 initTags()
 initSearch()
 initShortcuts()
+initPermSidebar()
 renderSidebarNoteCards()
 updateTagSelect()

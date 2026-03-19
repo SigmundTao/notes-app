@@ -1,7 +1,8 @@
-import { displayingNotes, notes, showingBookmarks, resetDisplayingNotes, getCurrentNoteId, setCurrentNoteID, setDisplayState, updateEditorVisibility } from './state.js'
+import { displayingNotes, notes, showingBookmarks, resetDisplayingNotes, getCurrentNoteId, setCurrentNoteID, setDisplayState, updateEditorVisibility, tags } from './state.js'
 import { getNoteIndex, updateNoteData, updateTagData } from './storage.js'
 import { loadNote } from './editor.js'
 import { showBookmarkedNotes } from './bookmarks.js'
+import { updateTagSelect } from './tags.js'
 
 const displayingNotesContainerEl = document.getElementById('displaying-notes-container')
 
@@ -23,49 +24,11 @@ class NoteCard {
         const card = document.createElement('div')
         card.classList.add('note-card')
         card.innerHTML = `
-            <h4>${this.note.title}</h4>
-            <p>${this.note.date}</p>
+            <div class="note-card-img"></div>
+            <p>${this.note.title}</p>
         `
         card.id = this.note.id;
-        card.appendChild(this.createBookmark())
-        card.appendChild(this.createDeleteBtn())
         card.addEventListener('click', () => loadNote(this.note.id))
         return card
-    }
-
-    createBookmark(){
-        const bookmark = document.createElement('div')
-        const isBookmarked = this.note.bookmarked ? 'bookmarked' : 'unbookmarked'
-        bookmark.classList.add('note-card-bookmark', isBookmarked)
-        const note = notes[getNoteIndex(this.note.id)];
-        bookmark.addEventListener('click', (e) => {
-            e.stopPropagation()
-            note.bookmarked = !note.bookmarked
-            /// Updates note array data directly
-            updateNoteData()
-            if(showingBookmarks) showBookmarkedNotes()
-            else { renderSidebarNoteCards() }
-        })
-        return bookmark
-    }
-
-    createDeleteBtn(){
-        const btn = document.createElement('button')
-        btn.classList.add('delete-note-btn')
-        btn.textContent = 'x'
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation()
-            notes.splice(getNoteIndex(this.note.id), 1)
-            updateNoteData()
-            resetDisplayingNotes()
-            if(getCurrentNoteId() === this.note.id){
-                setCurrentNoteID(null)
-                setDisplayState('Idle')
-                updateEditorVisibility()
-            }
-            renderSidebarNoteCards()
-            updateTagData()
-        })
-        return btn
     }
 }
