@@ -41,6 +41,7 @@ button {
     display: flex;
     flex-direction: column;
     background-color: var(--secondary);
+    border: 2px solid red;
 }
 
 #displaying-notes-container {
@@ -156,7 +157,7 @@ button {
 }
 
 .selected-note {
-    background-color: aqua;
+    background-color: var(--primary);
 }
 
 #search-menu {
