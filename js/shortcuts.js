@@ -1,4 +1,4 @@
-import { currentNoteID, currentNoteDisplayState, notes } from './state.js'
+import { currentNoteID, currentNoteDisplayState, notes, displayingNotes } from './state.js'
 import { getNoteIndex } from './storage.js'
 import { saveNote, saveNoteChanges, createBlankNote, loadNote } from './editor.js'
 import { openSearchMenu } from './search.js'
@@ -18,21 +18,21 @@ function handleKeydown(e){
         createBlankNote()
 
     } else if(e.altKey && e.key === 'ArrowDown'){
-        if(currentNoteID === 0){
-            loadNote(notes[0].id)
+        if(currentNoteID === null){
+            loadNote(displayingNotes[0].id)
         } else {
-            const nextIndex = getNoteIndex(currentNoteID) + 1
-            if(nextIndex > notes.length - 1) return
-            loadNote(notes[nextIndex].id)
+            const nextIndex = displayingNotes.findIndex(note => note.id === currentNoteID) + 1
+            if(nextIndex > displayingNotes.length - 1) return
+            loadNote(displayingNotes[nextIndex].id)
         }
 
     } else if(e.altKey && e.key === 'ArrowUp'){
-        if(currentNoteID === 0){
-            loadNote(notes[notes.length - 1].id)
+        if(currentNoteID === null){
+            loadNote(displayingNotes[displayingNotes.length - 1].id)
         } else {
-            const prevIndex = getNoteIndex(currentNoteID) - 1
+            const prevIndex = displayingNotes.findIndex(note => note.id === currentNoteID) - 1
             if(prevIndex < 0) return
-            loadNote(notes[prevIndex].id)
+            loadNote(displayingNotes[prevIndex].id)
         }
 
     } else if(e.altKey && e.key === 'd'){

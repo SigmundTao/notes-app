@@ -1,11 +1,15 @@
-import { notes, tags, currentNoteID } from './state.js'
-import { getNoteIndex } from './storage.js'
-import { updateTagData, updateNoteData } from './storage.js'
+import { notes, tags, currentNoteID, resetDisplayingNotes } from './state.js'
+import { updateTagData, updateNoteData, getNoteIndex } from './storage.js'
 import { renderSidebarNoteCards } from './sidebar.js'
 
 const tagInputEl = document.getElementById('tags-input')
 const tagDisplayEl = document.getElementById('tags-display')
 const tagSelectEl = document.getElementById('tag-select')
+
+export function clearTags(){
+    tagInputEl.value = ''
+    tagDisplayEl.innerHTML = ''
+}
 
 export function initTags(){
     tagInputEl.addEventListener('blur', handleTagBlur)
@@ -30,10 +34,8 @@ function handleTagDisplayClick(){
 function handleTagSelectChange(){
     const selected = tagSelectEl.value
     if(selected === 'All'){
-        import('./state.js').then(({ resetDisplayingNotes }) => {
-            resetDisplayingNotes()
-            renderSidebarNoteCards()
-        })
+        resetDisplayingNotes()
+        renderSidebarNoteCards()
     } else {
         filterByTag(selected)
     }
@@ -48,7 +50,7 @@ export function loadTagsForNote(note){
     tagInputEl.value = note.tags && note.tags.length > 0
         ? note.tags.map(tag => `[${tag}]`).join(' ')
         : ''
-    tagDisplayEl.innerHTML = note.tags
+    tagDisplayEl.innerHTML = note.tags.length > 0
         ? note.tags.map(tag => `<span class="tag">${tag}</span>`).join('')
         : ''
     tagInputEl.style.display = 'none'
@@ -67,6 +69,9 @@ export function saveTags(tagArr){
     tagArr.forEach(tag => {
         if(!tags.includes(tag)) tags.push(tag)
     })
+
+    console.log('tags before splice:', [...tags])
+    console.log('removed tags:', removedTags)
 
     removedTags.forEach(t => {
         const stillInUse = notes.some(note => note.tags && note.tags.includes(t))

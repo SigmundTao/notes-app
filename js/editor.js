@@ -1,7 +1,7 @@
 import { notes, currentNoteID, currentNoteDisplayState, setCurrentNoteID, setDisplayState, resetDisplayingNotes, idNum, incrementIdNum, updateEditorVisibility } from './state.js'
 import { getNoteIndex, updateNoteData } from './storage.js'
 import { renderSidebarNoteCards } from './sidebar.js'
-import { loadTagsForNote } from './tags.js'
+import { loadTagsForNote, clearTags } from './tags.js'
 
 console.log(notes);
 
@@ -55,14 +55,17 @@ export function loadNote(id){
     loadTagsForNote(note)
     setCurrentNoteID(note.id)
     setDisplayState('Editing')
+    updateEditorVisibility()
     updateWordCount()
     highlightSelectedNote(note.id)
 }
 
 export function createBlankNote(){
+    clearTags()
     noteBodyEl.value = ''
     noteTitleEl.value = 'Untitled Note'
     setDisplayState('Creating')
+    updateEditorVisibility()
     noteTitleEl.focus()
 }
 

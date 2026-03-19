@@ -25,6 +25,8 @@ export function resetDisplayingNotes(){ displayingNotes = [...notes] }
 export function setDisplayingNotes(arr){ displayingNotes = arr }
 export function incrementIdNum(){ idNum++ }
 export function updateEditorVisibility(){
-    if(!currentNoteDisplayState === 'Idle') idleScreenEl.style.display = 'none';
+    console.log('state before: ', currentNoteDisplayState)
+    if(currentNoteDisplayState !== 'Idle') idleScreenEl.style.display = 'none';
     else { idleScreenEl.style.display = 'flex' }
+    console.log('state after: ', currentNoteDisplayState)
 }

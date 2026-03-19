@@ -1,5 +1,5 @@
-import { displayingNotes, notes, showingBookmarks, resetDisplayingNotes, getCurrentNoteId, setCurrentNoteID, setDisplayState } from './state.js'
-import { getNoteIndex, updateNoteData } from './storage.js'
+import { displayingNotes, notes, showingBookmarks, resetDisplayingNotes, getCurrentNoteId, setCurrentNoteID, setDisplayState, updateEditorVisibility } from './state.js'
+import { getNoteIndex, updateNoteData, updateTagData } from './storage.js'
 import { loadNote } from './editor.js'
 import { showBookmarkedNotes } from './bookmarks.js'
 
@@ -61,8 +61,10 @@ class NoteCard {
             if(getCurrentNoteId() === this.note.id){
                 setCurrentNoteID(null)
                 setDisplayState('Idle')
+                updateEditorVisibility()
             }
             renderSidebarNoteCards()
+            updateTagData()
         })
         return btn
     }

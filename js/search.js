@@ -32,7 +32,9 @@ function closeSearchMenu(){
 function handleSearchInput(e){
     clearTimeout(searchDebounce)
     searchDebounce = setTimeout(() => {
-        searchResults = notes.filter(item => item.title.includes(e.target.value))
+        searchResults = notes.filter(item => item.title.toLowerCase().includes(e.target.value.toLowerCase())
+        || item.body.toLowerCase().includes(e.target.value.toLowerCase())
+    )
         searchResultsHolderEl.innerHTML = ''
         displaySearchResults(searchResults, searchResultsHolderEl)
     }, 300)
