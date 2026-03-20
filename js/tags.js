@@ -25,6 +25,10 @@ function handleTagBlur(){
     saveTags(parsedTags)
 }
 
+tagInputEl.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter') tagInputEl.blur()
+})
+
 function handleTagDisplayClick(){
     tagDisplayEl.style.display = 'none'
     tagInputEl.style.display = 'block'

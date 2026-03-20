@@ -45,7 +45,7 @@ function createMenuItem(note){
     const menuItem = document.createElement('div')
     menuItem.classList.add('search-menu-item')
     menuItem.innerHTML = `
-        <img src="assets/text-icon.svg" class="search-result-img">
+        <img src="assets/file.svg" class="search-result-img">
         <p>${note.title}</p>
         <div class="date-container">
             <img src="assets/date-icon.svg" class="search-result-img">
