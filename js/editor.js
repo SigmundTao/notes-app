@@ -113,3 +113,7 @@ export function updateEditorVisibility(){
 export function focusOnNoteBody(){
     noteBodyEl.focus()
 }
+
+export function focusOnNoteTitle(){
+    noteTitleEl.focus()
+}

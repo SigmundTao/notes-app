@@ -2,6 +2,7 @@ import { selectedFileId, currentAppState, files, currentFolderId } from './state
 import { getFileIndex } from './storage.js'
 import { saveNoteChanges, createBlankNote, createNewNote, loadFile } from './editor.js'
 import { openSearchMenu } from './search.js'
+import { createFolder } from './filetree.js'
 
 export function initShortcuts(){
     window.addEventListener('keydown', handleKeydown)
@@ -40,5 +41,8 @@ function handleKeydown(e){
     } else if(e.altKey && e.key === 'd'){
         e.preventDefault()
         openSearchMenu()
+    } else if(e.altKey && e.key === 'f'){
+        e.preventDefault()
+        createFolder()
     }
 }

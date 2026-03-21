@@ -21,11 +21,6 @@ body {
     gap: 0;
 }
 
-input {
-    background-color: var(--primary);
-    border: none;
-}
-
 button {
     background-color: var(--tertiary);
     border: none;
@@ -61,7 +56,6 @@ button {
     position: relative;
     height: 3%;
     gap: 0;
-    font-size: 0.8rem;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -77,7 +71,6 @@ button {
 .note-card-img {
     height: 100%;
     width: 20%;
-    background-image: url('./assets/file.svg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
@@ -86,7 +79,7 @@ button {
 
 .file-name {
     overflow: hidden;
-    font-size: 0.9rem;
+    font-size: 0.7rem;
     height: 100%;
     max-width: 80%;
 }
@@ -389,4 +382,12 @@ button {
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
+}
+
+#temp-card-input {
+    width: 85%;
+    height: 90%;
+    font-size: 0.8rem;
+    background-color: var(--secondary);
+    border: none;
 }
