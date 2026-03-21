@@ -297,6 +297,17 @@ button {
     justify-content: center;
     align-items: center;
     display: flex;
+    flex-direction: column;
+}
+
+.hyperlink {
+    color: var(--accent);
+    font-weight: bold;
+}
+
+.hyperlink:hover {
+    cursor: pointer;
+    text-decoration: underline;
 }
 
 #perm-sidebar {

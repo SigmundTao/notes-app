@@ -1,7 +1,8 @@
 import { files, selectedFileId, setAppState, setSelectedFileId, idNum, incrementIdNum, currentAppState, currentFolderId } from './state.js'
 import { getFileIndex, updateFileData, checkForDuplicateTitles, getFormattedDate } from './storage.js'
-import { renderFolderContents } from './filetree.js'
+import { createFolder, renderFolderContents } from './filetree.js'
 import { loadTagsForNote, clearTags, handleTagDisplayClick } from './tags.js'
+import { openSearchMenu } from './search.js'
 
 const noteTitleEl = document.getElementById('note-title')
 const noteBodyEl = document.getElementById('note-body')
@@ -10,6 +11,9 @@ const characterCountEl = document.getElementById('character-count')
 const idleScreenEl = document.getElementById('idle-screen')
 const dateCreatedEl = document.getElementById('date-created')
 const lastEditedEl = document.getElementById('date-last-edited')
+const newNoteHyperlink = document.getElementById('new-note-hyperlink')
+const newFolderHyperlink = document.getElementById('new-folder-hyperlink')
+const searchHyperlink = document.getElementById('search-hyperlink')
 
 let bodyDebounce
 
@@ -18,6 +22,9 @@ export function initEditor(){
     noteTitleEl.addEventListener('keydown', (e) => {
         if(e.key === 'Enter') handleTagDisplayClick()
     })
+    newNoteHyperlink.addEventListener('click', createBlankNote)
+    newFolderHyperlink.addEventListener('click', createFolder)
+    searchHyperlink.addEventListener('click', openSearchMenu)
 }
 
 function handleBodyInput(){
