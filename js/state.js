@@ -1,35 +1,40 @@
-export const notes = JSON.parse(localStorage.getItem('notes')) || []
-export const tags = JSON.parse(localStorage.getItem('tags')) || []
-export let displayingNotes = [...notes]
-export let currentNoteID = null
-export let currentNoteDisplayState = 'Idle'
-export let showingBookmarks = false
-export let idNum = notes.length > 0 ? Math.max(...notes.map(n => n.id)) + 1 : 1
-export const noteDisplayStates = ['Idle', 'Editing', 'Creating']
+export const files = JSON.parse(localStorage.getItem('files'))|| []
+export let selectedFileId = null
+export let currentFolderId = null
+export let currentAppState = 'Idle'
+export let idNum = files.length > 0 ? Math.max(...files.map(n => n.id)) + 1 : 1
+export const appStates = ['Idle', 'Editing', 'Creating']
 export let isFileHolderOpen = false
 const idleScreenEl = document.getElementById('idle-screen');
-export function setCurrentNoteID(id){ currentNoteID = id }
 
-export function setDisplayState(state){
-    if(!noteDisplayStates.includes(state)){
+export function setAppState(state){
+    if(!appStates.includes(state)){
         console.warn('Not a valid state:', state)
         return;
     }
-    currentNoteDisplayState = state;
+    currentAppState = state;
 }
 
-export function getCurrentNoteId(){
-    return currentNoteID
+export function getCurrentFolderContents(){
+    return files.filter(f => f.parentId === currentFolderId)
 }
-export function setShowingBookmarks(val){ showingBookmarks = val }
-export function resetDisplayingNotes(){ displayingNotes = [...notes] }
-export function setDisplayingNotes(arr){ displayingNotes = arr }
+
+export function setCurrentFolderId(id){
+    currentFolderId = id
+}
+
+export function getSelectedFileId(){
+    return selectedFileId
+}
+
+export function setSelectedFileId(id){
+    selectedFileId = id
+}
+
 export function incrementIdNum(){ idNum++ }
 export function updateEditorVisibility(){
-    console.log('state before: ', currentNoteDisplayState)
-    if(currentNoteDisplayState !== 'Idle') idleScreenEl.style.display = 'none';
+    if(currentAppState !== 'Idle') idleScreenEl.style.display = 'none';
     else { idleScreenEl.style.display = 'flex' }
-    console.log('state after: ', currentNoteDisplayState)
 }
 
 export function getFileHolderState(){ return isFileHolderOpen }

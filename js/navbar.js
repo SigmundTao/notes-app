@@ -1,4 +1,4 @@
-import { toggleFileHolder, collapsingFileHolderEl} from "./sidebar.js"
+import { toggleFileHolder } from "./filetree.js"
 
 const toggleFilesBtn = document.getElementById('files-btn')
 

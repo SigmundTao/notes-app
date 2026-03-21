@@ -1,5 +1,5 @@
 import { notes, setShowingBookmarks, setDisplayingNotes, resetDisplayingNotes } from './state.js'
-import { renderSidebarNoteCards } from './sidebar.js'
+import { renderSidebarNoteCards } from './filetree.js'
 
 export function showBookmarkedNotes(){
     setShowingBookmarks(true)

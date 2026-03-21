@@ -1,12 +1,12 @@
-import { notes } from './state.js'
-import { loadNote } from './editor.js'
+import { files } from './state.js'
+import { loadFile } from './editor.js'
 
 const searchMenu = document.getElementById('search-menu')
 const closeSearchMenuBtn = document.getElementById('close-search-menu-btn')
 const searchBarEl = document.getElementById('search-bar')
 const searchResultsHolderEl = document.getElementById('search-results')
 
-let searchResults = [...notes]
+let searchResults = [...files]
 let searchDebounce
 
 export function initSearch(){
@@ -20,40 +20,41 @@ export function initSearch(){
 export function openSearchMenu(){
     searchBarEl.value = ''
     searchResultsHolderEl.innerHTML = ''
-    displaySearchResults(notes, searchResultsHolderEl)
+    displaySearchResults(files, searchResultsHolderEl)
     searchMenu.showModal()
     searchBarEl.focus()
-    window.addEventListener('click', () => closeSearchMenu(), { once:true })
+    window.addEventListener('click', () => closeSearchMenu(), { once: true })
 }
 
-function closeSearchMenu(){
+export function closeSearchMenu(){
     searchMenu.close()
 }
 
 function handleSearchInput(e){
     clearTimeout(searchDebounce)
     searchDebounce = setTimeout(() => {
-        searchResults = notes.filter(item => item.title.toLowerCase().includes(e.target.value.toLowerCase())
-        || item.body.toLowerCase().includes(e.target.value.toLowerCase())
-    )
+        searchResults = files.filter(item =>
+            item.title.toLowerCase().includes(e.target.value.toLowerCase()) ||
+            item.body && item.body.toLowerCase().includes(e.target.value.toLowerCase())
+        )
         searchResultsHolderEl.innerHTML = ''
         displaySearchResults(searchResults, searchResultsHolderEl)
     }, 300)
 }
 
-function createMenuItem(note){
+function createMenuItem(file){
     const menuItem = document.createElement('div')
     menuItem.classList.add('search-menu-item')
     menuItem.innerHTML = `
         <img src="assets/file.svg" class="search-result-img">
-        <p>${note.title}</p>
+        <p>${file.title}</p>
         <div class="date-container">
             <img src="assets/date-icon.svg" class="search-result-img">
-            <p>${note.date}</p>
+            <p>${file.date}</p>
         </div>
     `
     menuItem.addEventListener('click', () => {
-        loadNote(note.id)
+        loadFile(file.id)
         closeSearchMenu()
     })
     return menuItem

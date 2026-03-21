@@ -1,6 +1,6 @@
-import { currentNoteID, currentNoteDisplayState, notes, displayingNotes } from './state.js'
-import { getNoteIndex } from './storage.js'
-import { saveNote, saveNoteChanges, createBlankNote, loadNote } from './editor.js'
+import { selectedFileId, currentAppState, files, currentFolderId } from './state.js'
+import { getFileIndex } from './storage.js'
+import { saveNoteChanges, createBlankNote, createNewNote, loadFile } from './editor.js'
 import { openSearchMenu } from './search.js'
 
 export function initShortcuts(){
@@ -10,29 +10,31 @@ export function initShortcuts(){
 function handleKeydown(e){
     if(e.altKey && e.key === 's'){
         e.preventDefault()
-        if(currentNoteDisplayState === 'Creating') saveNote()
-        else if(currentNoteDisplayState === 'Editing') saveNoteChanges()
+        if(currentAppState === 'Creating') createNewNote()
+        else if(currentAppState === 'Editing') saveNoteChanges()
 
     } else if(e.altKey && e.key === 'n'){
         e.preventDefault()
         createBlankNote()
 
     } else if(e.altKey && e.key === 'ArrowDown'){
-        if(currentNoteID === null){
-            loadNote(displayingNotes[0].id)
+        const folderContents = files.filter(f => f.parentId === currentFolderId)
+        if(selectedFileId === null){
+            loadFile(folderContents[0].id)
         } else {
-            const nextIndex = displayingNotes.findIndex(note => note.id === currentNoteID) + 1
-            if(nextIndex > displayingNotes.length - 1) return
-            loadNote(displayingNotes[nextIndex].id)
+            const nextIndex = folderContents.findIndex(f => f.id === selectedFileId) + 1
+            if(nextIndex > folderContents.length - 1) return
+            loadFile(folderContents[nextIndex].id)
         }
 
     } else if(e.altKey && e.key === 'ArrowUp'){
-        if(currentNoteID === null){
-            loadNote(displayingNotes[displayingNotes.length - 1].id)
+        const folderContents = files.filter(f => f.parentId === currentFolderId)
+        if(selectedFileId === null){
+            loadFile(folderContents[folderContents.length - 1].id)
         } else {
-            const prevIndex = displayingNotes.findIndex(note => note.id === currentNoteID) - 1
+            const prevIndex = folderContents.findIndex(f => f.id === selectedFileId) - 1
             if(prevIndex < 0) return
-            loadNote(displayingNotes[prevIndex].id)
+            loadFile(folderContents[prevIndex].id)
         }
 
     } else if(e.altKey && e.key === 'd'){
