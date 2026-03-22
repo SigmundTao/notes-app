@@ -94,41 +94,49 @@ class FileCard {
 
 /// Drag and drop files handlers
 function dragstart(e){
-    setDraggedElid(e.target.id)
+    setDraggedElid(e.currentTarget.id)
 }
 
 function dragEnter(e){
     e.preventDefault()
-    const fileCard = e.target.classList.contains('file-card') ?  e.target
-    : e.target.parentElement
-    fileCard.classList.add('drag-over')
+    e.current.classList.add('drag-over')
 }
 
 function dragOver(e){
     e.preventDefault()
-    const fileCard = e.target.classList.contains('file-card') ?  e.target
-    : e.target.parentElement
-    fileCard.classList.add('drag-over')
+    e.currentTarget.classList.add('drag-over')
 }
 
 function dragLeave(e){
-    const fileCard = e.target.classList.contains('file-card') ?  e.target
-    : e.target.parentElement
-    fileCard.classList.remove('drag-over')
+    e.currentTarget.classList.remove('drag-over')
 }
 
 function drop(e){
-    e.target.classList.remove('drag-over')
+    e.currentTarget.classList.remove('drag-over')
+    const draggedId = Number(getDraggedElId())
+    const targetId = Number(e.currentTarget.id)
 
-    const fileCard = e.target.classList.contains('file-card') ?  e.target
-    : e.target.parentElement
+    if(draggedId === targetId) return
 
-    const draggedFile = files[getFileIndex(getDraggedElId())]
+    if(isDescendant(draggedId, targetId)) return
 
-    draggedFile.parentId = Number(fileCard.id)
+    const draggedFile = files[getFileIndex(Number(getDraggedElId()))]
+    if(!draggedFile) return
+    
+    draggedFile.parentId = targetId
     setDraggedElid(null)
     updateFileData()
     renderFolderContents()
+}
+
+function isDescendant(draggedId, targetId){
+    let current = files[getFileIndex(targetId)]
+    while(current && current.parentId !== null){
+        if(current.parentId === draggedId) return true
+        current = files[getFileIndex(current.parentId)]
+    }
+
+    return false
 }
 
 function returnImgBasedOnFileType(fileType){
