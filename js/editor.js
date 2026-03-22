@@ -69,6 +69,7 @@ export function createBlankNote(){
     setAppState('Creating')
     updateEditorVisibility()
     noteTitleEl.focus()
+    noteTitleEl.setSelectionRange(noteTitleEl.value.length, noteTitleEl.value.length)
 }
 
 export function saveNoteChanges(){

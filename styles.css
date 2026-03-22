@@ -41,6 +41,7 @@ button {
     padding-left: 50px;
     width: 30vw;
     margin: 0;
+    overflow: hidden;
 }
 
 #displaying-notes-container {
@@ -77,6 +78,10 @@ button {
 .folder-contents {
     display: none;
     width: 100%;
+}
+
+.folder-contents *:hover {
+    background-color: var(--tertiary);
 }
 
 .showing-contents {
