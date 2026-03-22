@@ -11,34 +11,68 @@ createNoteBtn.addEventListener('click', createBlankNote)
 
 export function renderFolderContents(){
     fileTreeContainerEl.innerHTML = ''
-    const folderContents = files.filter(file => file.parentId === currentFolderId)
+    files.forEach(file => {
+        if(file.parentId) return
+        const card = file.type === 'folder' ? renderFolder(file) : renderFile(file)
+        
+        fileTreeContainerEl.appendChild(card)
+    })  
+}
+
+function renderFolder(folder){
+    const folderCard = new FileCard(folder)
+    const folderContents = files.filter(f => f.parentId === folder.id)
+    const folderContentsHolder = folderCard.element.querySelector('.folder-contents')
+    folderCard.element.appendChild(folderContentsHolder)
+
     folderContents.forEach(file => {
-        const card = new FileCard(file)
-        fileTreeContainerEl.appendChild(card.element)
+        const childCard = file.type === 'folder' ? renderFolder(file) : renderFile(file)
+        folderContentsHolder.appendChild(childCard)
     })
+
+    
+    return folderCard.element
+}
+
+function renderFile(file){
+    const fileCard = new FileCard(file)
+    return fileCard.element
 }
 
 class FileCard {
     constructor(file){
         this.file = file
         this.element = this.createElement()
+        this.id = file.id
     }
 
     createElement(){
         const card = document.createElement('div')
+        card.id = this.file.id
         this.addDragEventListner(card)
         const type = this.file.type
         const imgSrc = returnImgBasedOnFileType(type)
-        card.classList.add('note-card')
-        card.innerHTML = `
-            <img class="note-card-img" src="${imgSrc}">
+        card.classList.add('file-card')
+        const fileCardHeader = document.createElement('div')
+        fileCardHeader.classList.add('file-card-header')
+        fileCardHeader.innerHTML = `
+            <img class="file-card-img" src="${imgSrc}">
             <p class="file-name">${this.file.title}</p>
         `
-        card.id = this.file.id
+        card.appendChild(fileCardHeader)
+        
         if(this.file.type === 'note'){
-            card.addEventListener('click', () => loadFile(this.file.id))
+            card.addEventListener('click', () => loadFile(this.id))
         } else if(this.file.type === 'folder'){
             this.addDropListener(card)
+            card.classList.add('folder')
+            const contentsHolder = document.createElement('div')
+            contentsHolder.classList.add('folder-contents')
+            card.appendChild(contentsHolder)
+            fileCardHeader.addEventListener('click', () => {
+                contentsHolder.classList.toggle('showing-contents')
+                console.log(contentsHolder.classList)
+            })
         }
         return card
     }
@@ -56,34 +90,41 @@ class FileCard {
     }
 }
 
+/// Drag and drop files handlers
 function dragstart(e){
     setDraggedElid(e.target.id)
 }
 
 function dragEnter(e){
     e.preventDefault()
-    e.target.classList.add('drag-over')
+    const fileCard = e.target.classList.contains('file-card') ?  e.target
+    : e.target.parentElement
+    fileCard.classList.add('drag-over')
 }
 
 function dragOver(e){
     e.preventDefault()
-    e.target.classList.add('drag-over')
+    const fileCard = e.target.classList.contains('file-card') ?  e.target
+    : e.target.parentElement
+    fileCard.classList.add('drag-over')
 }
 
 function dragLeave(e){
-    e.target.classList.remove('drag-over')
+    const fileCard = e.target.classList.contains('file-card') ?  e.target
+    : e.target.parentElement
+    fileCard.classList.remove('drag-over')
 }
 
 function drop(e){
     e.target.classList.remove('drag-over')
 
-    const fileCard = e.target.classList.contains('note-card') ?  e.target
+    const fileCard = e.target.classList.contains('file-card') ?  e.target
     : e.target.parentElement
 
-    const draggedFile = files[getFileIndex(getCurrentlyDraggedElId())]
+    const draggedFile = files[getFileIndex(getDraggedElId())]
 
-    draggedFile.parentId = fileCard.id
-    setDraggedElid = null
+    draggedFile.parentId = Number(fileCard.id)
+    setDraggedElid(null)
     updateFileData()
     renderFolderContents()
 }
@@ -99,8 +140,10 @@ export function createFolder(){
     temporaryCard.classList.add('note-card')
     temporaryCard.classList.add('temp')
     temporaryCard.innerHTML = `
-        <img class="note-card-img" src="./assets/empty-folder.svg">
-        <input type="text" id="temp-card-input">
+        <div class="file-card-header">
+            <img class="file-card-img" src="./assets/empty-folder.svg">
+            <input type="text" id="temp-card-input">
+        </div>
     `
     fileTreeContainerEl.appendChild(temporaryCard)
     const input = document.querySelector('#temp-card-input')
