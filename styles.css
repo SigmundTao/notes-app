@@ -432,3 +432,10 @@ button {
     background-color: var(--secondary);
     border: none;
 }
+
+#close-note-btn {
+    position: absolute;
+    top: 50px;
+    right: 50px;
+    z-index: 1;
+}

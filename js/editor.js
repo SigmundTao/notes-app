@@ -14,6 +14,13 @@ const lastEditedEl = document.getElementById('date-last-edited')
 const newNoteHyperlink = document.getElementById('new-note-hyperlink')
 const newFolderHyperlink = document.getElementById('new-folder-hyperlink')
 const searchHyperlink = document.getElementById('search-hyperlink')
+const closeNoteBtn = document.getElementById('close-note-btn')
+
+closeNoteBtn.addEventListener('click', () => {
+    setAppState('Idle')
+    updateEditorVisibility()
+    setSelectedFileId(null)
+})
 
 let bodyDebounce
 
