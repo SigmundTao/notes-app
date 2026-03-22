@@ -24,9 +24,11 @@ function renderFolder(folder){
     const folderContents = files.filter(f => f.parentId === folder.id)
     const folderContentsHolder = folderCard.element.querySelector('.folder-contents')
     folderCard.element.appendChild(folderContentsHolder)
+    const paddingLeft = Number(folderCard.element.style.paddingLeft.split('px')[0])
 
     folderContents.forEach(file => {
         const childCard = file.type === 'folder' ? renderFolder(file) : renderFile(file)
+        childCard.style.paddingLeft = `${paddingLeft + 10}px`
         folderContentsHolder.appendChild(childCard)
     })
 
