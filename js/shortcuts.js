@@ -1,8 +1,9 @@
 import { selectedFileId, currentAppState, files, currentFolderId } from './state.js'
 import { getFileIndex } from './storage.js'
-import { saveNoteChanges, createBlankNote, createNewNote, loadFile } from './editor.js'
+import { saveNoteChanges, createNewNote, loadFile } from './editor.js'
 import { openSearchMenu } from './search.js'
 import { createFolder } from './filetree.js'
+import { checkForDefaultTabs, createDefaultTab } from './tabs.js'
 
 export function initShortcuts(){
     window.addEventListener('keydown', handleKeydown)
@@ -16,7 +17,7 @@ function handleKeydown(e){
 
     } else if(e.altKey && e.key === 'n'){
         e.preventDefault()
-        createBlankNote()
+       
 
     } else if(e.altKey && e.key === 'ArrowDown'){
         const folderContents = files.filter(f => f.parentId === currentFolderId)
@@ -44,5 +45,9 @@ function handleKeydown(e){
     } else if(e.altKey && e.key === 'f'){
         e.preventDefault()
         createFolder()
+    } else if(e.altKey && e.key === 't'){
+        e.preventDefault()
+        if(checkForDefaultTabs) return
+        createDefaultTab()
     }
 }

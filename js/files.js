@@ -1,9 +1,8 @@
-import { createBlankNote } from "./editor.js"
 
 const newFileSpanEl = document.getElementById('new-file-anchor-text')
 
 export function initFiles(){
-    newFileSpanEl.addEventListener('click', createBlankNote)
+    
 }
 
 newFileSpanEl.addEventListener('click', (e) => {
