@@ -47,5 +47,6 @@ function handleKeydown(e){
         createFolder()
     } else if(e.altKey && e.key === 't'){
         e.preventDefault()
+        createDefaultTab()
     }
 }

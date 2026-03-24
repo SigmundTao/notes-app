@@ -25,7 +25,10 @@ function loadTab(id){
 }
 
 export function createDefaultTab(){
-    if(checkForDefaultTabs() !== -1) return
+    if(checkForDefaultTabs() !== -1){
+        switchToTab(openTabs[openTabs.findIndex(t => t.file === null)].id)
+        return
+    }
     createTab(null)
 }
 

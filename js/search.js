@@ -52,7 +52,7 @@ function createMenuItem(file){
         </div>
     `
     menuItem.addEventListener('click', () => {
-        openFile(file)
+        openFile(file.id)
         closeSearchMenu()
     })
     return menuItem
