@@ -1,5 +1,5 @@
 import { files } from './state.js'
-import { loadFile } from './editor.js'
+import { openFile } from './tabs.js'
 
 const searchMenu = document.getElementById('search-menu')
 const searchBarEl = document.getElementById('search-bar')
@@ -52,7 +52,7 @@ function createMenuItem(file){
         </div>
     `
     menuItem.addEventListener('click', () => {
-        loadFile(file.id)
+        openFile(file)
         closeSearchMenu()
     })
     return menuItem

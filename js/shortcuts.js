@@ -1,9 +1,9 @@
 import { selectedFileId, currentAppState, files, currentFolderId } from './state.js'
 import { getFileIndex } from './storage.js'
-import { saveNoteChanges, createNewNote, loadFile } from './editor.js'
+import { saveNoteChanges, createNewNote } from './editor.js'
 import { openSearchMenu } from './search.js'
 import { createFolder } from './filetree.js'
-import { checkForDefaultTabs, createDefaultTab } from './tabs.js'
+import {createDefaultTab, openFile } from './tabs.js'
 
 export function initShortcuts(){
     window.addEventListener('keydown', handleKeydown)
@@ -22,21 +22,21 @@ function handleKeydown(e){
     } else if(e.altKey && e.key === 'ArrowDown'){
         const folderContents = files.filter(f => f.parentId === currentFolderId)
         if(selectedFileId === null){
-            loadFile(folderContents[0].id)
+            openFile(folderContents[0].id)
         } else {
             const nextIndex = folderContents.findIndex(f => f.id === selectedFileId) + 1
             if(nextIndex > folderContents.length - 1) return
-            loadFile(folderContents[nextIndex].id)
+            loadTab(folderContents[nextIndex].id)
         }
 
     } else if(e.altKey && e.key === 'ArrowUp'){
         const folderContents = files.filter(f => f.parentId === currentFolderId)
         if(selectedFileId === null){
-            loadFile(folderContents[folderContents.length - 1].id)
+            openFile(folderContents[folderContents.length - 1].id)
         } else {
             const prevIndex = folderContents.findIndex(f => f.id === selectedFileId) - 1
             if(prevIndex < 0) return
-            loadFile(folderContents[prevIndex].id)
+            openFile(folderContents[prevIndex].id)
         }
 
     } else if(e.altKey && e.key === 'd'){
@@ -47,7 +47,5 @@ function handleKeydown(e){
         createFolder()
     } else if(e.altKey && e.key === 't'){
         e.preventDefault()
-        if(checkForDefaultTabs) return
-        createDefaultTab()
     }
 }

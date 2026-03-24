@@ -233,6 +233,8 @@ input:focus {
     padding: 10px;
 }
 
+.tab-card:hover {cursor: pointer;}
+
 .current-tab {
     background-color: var(--primary);
 }

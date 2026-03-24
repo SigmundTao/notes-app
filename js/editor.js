@@ -1,4 +1,3 @@
-import { createNoteTab } from "./tabs.js"
 import { files, getFileIndex } from "./state.js"
 
 export function highlightSelectedFile(id){
@@ -55,8 +54,4 @@ class Tab {
 
 export function initEditor(){
     
-}
-
-export function loadFile(file){
-    if(file.type === 'note') createNoteTab(file)
 }

@@ -1,55 +1,51 @@
-import { openTabs, getTabIndex, tabId, files, incrementTabId, currentTabId, setCurrentTabId } from "./state.js"
+import { openTabs, setCurrentTabId, tabId, currentTabId, getTabIndex, getTabIndexFromFileId, incrementTabId, files } from "./state.js"
 import { getFileIndex } from "./storage.js"
-import { loadFile } from "./editor.js"
 
-const tabBar = document.getElementById('tab-bar')
 const currentTabEl = document.getElementById('current-tab')
+const tabBar = document.getElementById('tab-bar')
 
-export function addNewTab(obj){
-    openTabs.push({
-        file: obj.fileId,
-        id: obj.id
-    })
+function createTab(fileId){
+    openTabs.push({file: fileId, id: tabId})
+    setCurrentTabId(tabId)
+    incrementTabId()
+    loadTab(currentTabId)
+    renderTabs()
 }
 
-export function deleteTab(id){
-    openTabs.splice(getTabIndex(id), 1)
-    renderTabs()
-    if(openTabs.length < 1){
-        currentTabEl.innerHTML = ''
-        setTimeout(createDefaultTab, 500)
+function loadTab(id){
+    const tabIndex = getTabIndex(id)
+    if(tabIndex === -1) return
+    const fileId = openTabs[tabIndex].file
+    if(fileId === null){
+        createDefaultView()
+    } else {
+        const file = files[getFileIndex(fileId)]
+        createNoteView(file)
     }
 }
 
 export function createDefaultTab(){
     if(checkForDefaultTabs() !== -1) return
+    createTab(null)
+}
 
-    currentTabEl.innerHTML = ''
-
-    const defaultPage = document.createElement('div')
-    defaultPage.classList.add('default-page')
-
-    const noteText = document.createElement('p')
-    noteText.textContent = 'Press Alt + n to create a note'
-    noteText.classList.add('default-page-text')
-
-    const folderText = document.createElement('p')
-    folderText.textContent = 'Press Alt + f to create a new folder'
-    folderText.classList.add('default-page-text')
-
-    const searchText = document.createElement('p')
-    searchText.textContent = 'Press Alt + d to search for a file'
-    searchText.classList.add('default-page-text')
-
-    defaultPage.appendChild(noteText)
-    defaultPage.appendChild(folderText)
-    defaultPage.appendChild(searchText)
-    currentTabEl.appendChild(defaultPage)
-
-    addNewTab({fileId: null, id: tabId})
-    setCurrentTabId(tabId)
-    incrementTabId()
+function switchToTab(id){
+    setCurrentTabId(id)
+    loadTab(id)
     renderTabs()
+}
+
+function deleteTab(id){
+    openTabs.splice(getTabIndex(id), 1)
+    renderTabs()
+    if(openTabs.length < 1){
+        currentTabEl.innerHTML = ''
+        setTimeout(createDefaultTab, 500)
+        return
+    }
+    if(currentTabId === id && openTabs.length > 0){
+        switchToTab(openTabs[0].id)
+    }
 }
 
 function renderTabs(){
@@ -72,23 +68,60 @@ function createTabCard(tab){
     const closeTabBtn = document.createElement('button')
     closeTabBtn.classList.add('close-tab-btn')
     closeTabBtn.textContent = 'X'
-    closeTabBtn.addEventListener('click', () => deleteTab(tab.id))
+    closeTabBtn.addEventListener('click', (e) => {
+        e.stopPropagation()
+        deleteTab(tab.id)
+    })
 
-    tabCard.addEventListener('click', () => loadTab(tab.id))
+    tabCard.addEventListener('click', () => switchToTab(tab.id))
     tabCard.appendChild(tabTitle)
     tabCard.appendChild(closeTabBtn)
     return tabCard
 }
 
-export function checkForDefaultTabs(){
+export function openFile(fileId){
+    if(files[getFileIndex(fileId)].type === 'folder') return
+    if(getIfTabExists(fileId)){
+        const tabIndex = getTabIndexFromFileId(fileId)
+        switchToTab(openTabs[tabIndex].id)
+    } else {
+        createTab(fileId)
+    }
+}
+
+function checkForDefaultTabs(){
     return openTabs.findIndex(t => t.file === null)
 }
 
-export function createNoteTab(file){
-    addNewTab({fileId: file.id, id: tabId})
-    setCurrentTabId(tabId)
-    incrementTabId()
+function getIfTabExists(fileId){
+    return openTabs.findIndex(t => t.file === fileId) !== -1
+}
 
+function createDefaultView(){
+    currentTabEl.innerHTML = ''
+
+    const defaultPage = document.createElement('div')
+    defaultPage.classList.add('default-page')
+
+    const noteText = document.createElement('p')
+    noteText.textContent = 'Press Alt + n to create a note'
+    noteText.classList.add('default-page-text')
+
+    const folderText = document.createElement('p')
+    folderText.textContent = 'Press Alt + f to create a new folder'
+    folderText.classList.add('default-page-text')
+
+    const searchText = document.createElement('p')
+    searchText.textContent = 'Press Alt + d to search for a file'
+    searchText.classList.add('default-page-text')
+
+    defaultPage.appendChild(noteText)
+    defaultPage.appendChild(folderText)
+    defaultPage.appendChild(searchText)
+    currentTabEl.appendChild(defaultPage)
+}
+
+function createNoteView(file){
     currentTabEl.innerHTML = ''
 
     const tab = document.createElement('div')
@@ -106,16 +139,4 @@ export function createNoteTab(file){
     tab.appendChild(titleInput)
     tab.appendChild(noteContentInput)
     currentTabEl.appendChild(tab)
-    renderTabs()
-}
-
-function loadTab(id){
-    const tabIndex = getTabIndex(id)
-    setCurrentTabId(id)
-    if(openTabs[tabIndex].file === null){
-        createDefaultTab()
-    } else {
-        createNoteTab(files[getFileIndex(openTabs[tabIndex].file)])
-    }
-    renderTabs()
 }

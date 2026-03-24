@@ -1,7 +1,6 @@
 import { files, currentFolderId, isFileHolderOpen, toggleFileHolderState, incrementIdNum, idNum, getSelectedFileId, setSelectedFileId, setAppState, setDraggedElid, getDraggedElId } from './state.js'
 import { getFileIndex, getFormattedDate, updateFileData } from './storage.js'
-import { loadFile } from './editor.js'
-
+import { openFile } from './tabs.js';
 export const fileTreeEl = document.getElementById('filetree');
 const fileTreeContainerEl = document.getElementById('files-container')
 const createNoteBtn = document.getElementById('create-note-btn');
@@ -47,7 +46,7 @@ class FileCard {
     createElement(){
         const card = document.createElement('div')
         card.id = this.file.id
-        card.addEventListener('click', () => { loadFile(this.file) })
+        card.addEventListener('click', () => { openFile(this.file.id) })
         this.addDragEventListner(card)
         const type = this.file.type
         const imgSrc = returnImgBasedOnFileType(type)
@@ -61,7 +60,7 @@ class FileCard {
         card.appendChild(fileCardHeader)
         
         if(this.file.type === 'note'){
-            card.addEventListener('click', () => loadFile(this.id))
+            card.addEventListener('click', () => openFile(this.id))
         } else if(this.file.type === 'folder'){
             this.addDropListener(card)
             card.classList.add('folder')
@@ -210,7 +209,7 @@ function createRightClickMenu(posX, posY, file){
         menuEditBtn.textContent = 'Edit'
         menuEditBtn.addEventListener('click', (e) => {
             e.stopPropagation()
-            loadFile(file.id)
+            openFile(file.id)
             menu.remove()
         })
         menu.appendChild(menuEditBtn)

@@ -16,8 +16,12 @@ export function incrementTabId(){
     tabId++
 }
 
-export function getTabIndex(tabId){
-    return openTabs.findIndex(t => t.tabId === tabId)
+export function getTabIndex(id){
+    return openTabs.findIndex(t => t.id === id)
+}
+
+export function getTabIndexFromFileId(fileId){
+    return openTabs.findIndex(tab => tab.file === fileId)
 }
 
 export function setCurrentTabId(id){
