@@ -4,7 +4,7 @@ import { getFileIndex } from "./storage.js"
 const currentTabEl = document.getElementById('current-tab')
 const tabBar = document.getElementById('tab-bar')
 
-function createTab(fileId){
+export function createTab(fileId){
     openTabs.push({file: fileId, id: tabId})
     setCurrentTabId(tabId)
     incrementTabId()
@@ -160,3 +160,4 @@ function overwriteDefaultTab(fileId){
 
     openTabs[defaultTabIndex].file = fileId
 }
+

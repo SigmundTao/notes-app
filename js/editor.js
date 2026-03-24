@@ -1,4 +1,10 @@
-import { files, getFileIndex } from "./state.js"
+import { files, getFileIndex, idNum, currentFolderId, incrementIdNum, setSelectedFileId, setAppState } from "./state.js"
+import { getFormattedDate, updateFileData } from "./storage.js"
+import { createTab } from "./tabs.js"
+import { renderFolderContents } from "./filetree.js"
+
+const createNoteBtn = document.getElementById('create-note-btn')
+createNoteBtn.addEventListener('click', createNewNote)
 
 export function highlightSelectedFile(id){
     document.querySelectorAll('.file-card').forEach(card => card.classList.remove('selected-note'))
@@ -32,6 +38,7 @@ export function createNewNote(){
         lastEdited: date,
         tags: []
     })
+    createTab(id)
     incrementIdNum()
     updateFileData()
     setSelectedFileId(id)
@@ -39,6 +46,8 @@ export function createNewNote(){
     renderFolderContents()
     return id
 }
+
+
 
 class Tab {
     constructor(file){

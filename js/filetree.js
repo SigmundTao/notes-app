@@ -138,7 +138,7 @@ function returnImgBasedOnFileType(fileType){
 }
 
 export function createFolder(){
-    removeTempFolder()
+    removeTempFile()
     const temporaryCard = document.createElement('div')
     temporaryCard.classList.add('file-card')
     temporaryCard.classList.add('temp')
@@ -155,15 +155,15 @@ export function createFolder(){
         if(e.key === 'Enter') {
             if(input.value.trim() === '') return
             saveFolder()
-            removeTempFolder()
+            removeTempFile()
             renderFolderContents()
         }
     })
 }
 
-function removeTempFolder(){
-    const tempFolder = document.querySelector('.temp')
-    if(tempFolder) tempFolder.remove()
+function removeTempFile(){
+    const tempFile = document.querySelector('.temp')
+    if(tempFile) tempFile.remove()
 }
 
 function saveFolder(){
