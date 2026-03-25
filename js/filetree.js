@@ -1,7 +1,7 @@
 import { highlightSelectedFile } from './editor.js';
-import { files, currentFolderId, isFileHolderOpen, toggleFileHolderState, incrementIdNum, idNum, getSelectedFileId, setSelectedFileId, setAppState, setDraggedElid, getDraggedElId, selectedFileId } from './state.js'
+import { files, currentFolderId, isFileHolderOpen, toggleFileHolderState, incrementIdNum, idNum, getSelectedFileId, setSelectedFileId, setAppState, setDraggedElid, getDraggedElId, selectedFileId, openTabs, getTabIndexFromFileId } from './state.js'
 import { getFileIndex, getFormattedDate, updateFileData } from './storage.js'
-import { openFile } from './tabs.js';
+import { openFile, checkIfTabExists, deleteTab } from './tabs.js';
 export const fileTreeEl = document.getElementById('filetree');
 const fileTreeContainerEl = document.getElementById('files-container')
 const createNoteBtn = document.getElementById('create-note-btn');
@@ -231,7 +231,9 @@ export function deleteFile(id){
     if(id === getSelectedFileId()){
         setSelectedFileId(null)
         setAppState('Idle')
-        updateEditorVisibility()
+    }
+    if(checkIfTabExists() !== -1){
+        deleteTab(openTabs[getTabIndexFromFileId(id)].id)
     }
 }
 

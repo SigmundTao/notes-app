@@ -12,18 +12,17 @@ export function highlightSelectedFile(id){
     if(selectedCard) selectedCard.classList.add('selected-file')
 }
 
-function getTitleInput(){
+ export function getTitleInput(){
     return document.querySelector('.note-title')
 }
 
-function getBodyInput(){
+export function getBodyInput(){
     return document.querySelector('.note-body')
 }
 
 export function saveNote(file){
     const fileIndex = getFileIndex(file.id)
     if(fileIndex === -1) return
-    console.log(checkForDuplicateTitles(file.title, file.id))
     if(checkForDuplicateTitles(file.title, file.id)) return
     file.title = getTitleInput().value
     console.log(getTitleInput().value)
@@ -39,8 +38,9 @@ export function saveNote(file){
 export function createNewNote(){
     const date = getFormattedDate(new Date())
     const id = idNum
+    const title = getUntitledTitle()
     files.push({
-        title: 'Untitled',
+        title: title,
         body: '',
         id,
         type: 'note',
@@ -58,6 +58,13 @@ export function createNewNote(){
     return id
 }
 
-export function initEditor(){
-    
+function getUntitledTitle(){
+    const untitledTitles = new Set(files.filter(f => f.title.startsWith('Untitled')).map(f => f.title))
+    if(!untitledTitles.has('Untitled')) return 'Untitled'
+    let i = 1
+    while(untitledTitles.has(`Untitled ${i}`)){
+        i++
+        if(i > 1000) break
+    }
+    return `Untitled ${i}`
 }

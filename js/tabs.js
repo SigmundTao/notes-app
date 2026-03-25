@@ -1,6 +1,7 @@
 import { openTabs, setCurrentTabId, tabId, currentTabId, getTabIndex, getTabIndexFromFileId, incrementTabId, files, setSelectedFileId } from "./state.js"
-import { getFileIndex } from "./storage.js"
-import { highlightSelectedFile } from "./editor.js"
+import { checkForDuplicateTitles, getFileIndex } from "./storage.js"
+import { highlightSelectedFile, getTitleInput, getBodyInput } from "./editor.js"
+import { deleteFile } from "./filetree.js"
 
 const currentTabEl = document.getElementById('current-tab')
 const tabBar = document.getElementById('tab-bar')
@@ -43,17 +44,21 @@ function switchToTab(id){
     renderTabs()
 }
 
-function deleteTab(id){
-    openTabs.splice(getTabIndex(id), 1)
-    renderTabs()
+export function deleteTab(id){
+    const tabIndex = getTabIndex(id)
+    openTabs.splice(tabIndex, 1)
     if(openTabs.length < 1){
         currentTabEl.innerHTML = ''
         createDefaultTab()
         highlightSelectedFile(null)
         return
     }
-    if(currentTabId === id && openTabs.length > 0){
-        switchToTab(openTabs[0].id)
+
+    if(currentTabId === id){
+        const nextTab = openTabs[tabIndex] || openTabs[tabIndex - 1]
+        switchToTab(nextTab.id)
+    } else {
+        renderTabs()
     }
 }
 
@@ -90,7 +95,7 @@ function createTabCard(tab){
 
 export function openFile(fileId){
     if(files[getFileIndex(fileId)].type === 'folder') return
-    if(getIfTabExists(fileId)){
+    if(checkIfTabExists(fileId)){
         const tabIndex = getTabIndexFromFileId(fileId)
         switchToTab(openTabs[tabIndex].id)
     } else {
@@ -109,7 +114,7 @@ function checkForDefaultTabs(){
     return openTabs.findIndex(t => t.file === null)
 }
 
-function getIfTabExists(fileId){
+export function checkIfTabExists(fileId){
     return openTabs.findIndex(t => t.file === fileId) !== -1
 }
 
