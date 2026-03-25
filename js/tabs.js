@@ -19,6 +19,8 @@ function loadTab(id){
     const fileId = openTabs[tabIndex].file
     if(fileId === null){
         createDefaultView()
+        setSelectedFileId(null)
+        highlightSelectedFile()
     } else {
         const file = files[getFileIndex(fileId)]
         setSelectedFileId(file.id)
@@ -55,7 +57,7 @@ function deleteTab(id){
     }
 }
 
-function renderTabs(){
+export function renderTabs(){
     tabBar.innerHTML = ''
     openTabs.forEach(tab => {
         const tabCard = createTabCard(tab)

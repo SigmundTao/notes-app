@@ -1,6 +1,6 @@
 import { files, getFileIndex, idNum, currentFolderId, incrementIdNum, setSelectedFileId, setAppState } from "./state.js"
-import { getFormattedDate, updateFileData } from "./storage.js"
-import { createTab } from "./tabs.js"
+import { getFormattedDate, updateFileData, checkForDuplicateTitles } from "./storage.js"
+import { createTab, renderTabs } from "./tabs.js"
 import { renderFolderContents } from "./filetree.js"
 
 const createNoteBtn = document.getElementById('create-note-btn')
@@ -13,25 +13,27 @@ export function highlightSelectedFile(id){
 }
 
 function getTitleInput(){
-    return document.querySelector('note-title')
+    return document.querySelector('.note-title')
 }
 
 function getBodyInput(){
-    return document.querySelector('note-body')
+    return document.querySelector('.note-body')
 }
 
 export function saveNote(file){
     const fileIndex = getFileIndex(file.id)
     if(fileIndex === -1) return
-    const note = files[fileIndex]
-    if(checkForDuplicateTitles(title, file.id)) return
-    note.title = getTitleInput().value
-    note.body = getBodyInput().value
-    note.lastEdited = getFormattedDate(new Date())
+    console.log(checkForDuplicateTitles(file.title, file.id))
+    if(checkForDuplicateTitles(file.title, file.id)) return
+    file.title = getTitleInput().value
+    console.log(getTitleInput().value)
+    file.body = getBodyInput().value
+    file.lastEdited = getFormattedDate(new Date())
     setSelectedFileId(file.id)
     setAppState('Editing')
     updateFileData()
     renderFolderContents()
+    renderTabs()
 }
 
 export function createNewNote(){

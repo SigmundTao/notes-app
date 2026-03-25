@@ -1,4 +1,5 @@
-import { files, currentFolderId, isFileHolderOpen, toggleFileHolderState, incrementIdNum, idNum, getSelectedFileId, setSelectedFileId, setAppState, setDraggedElid, getDraggedElId } from './state.js'
+import { highlightSelectedFile } from './editor.js';
+import { files, currentFolderId, isFileHolderOpen, toggleFileHolderState, incrementIdNum, idNum, getSelectedFileId, setSelectedFileId, setAppState, setDraggedElid, getDraggedElId, selectedFileId } from './state.js'
 import { getFileIndex, getFormattedDate, updateFileData } from './storage.js'
 import { openFile } from './tabs.js';
 export const fileTreeEl = document.getElementById('filetree');
@@ -13,6 +14,7 @@ export function renderFolderContents(){
         const card = file.type === 'folder' ? renderFolder(file) : renderFile(file)
         fileTreeContainerEl.appendChild(card)
     })  
+    highlightSelectedFile(selectedFileId)
 }
 
 function renderFolder(folder){

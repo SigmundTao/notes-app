@@ -12,7 +12,7 @@ export function initShortcuts(){
 function handleKeydown(e){
     if(e.altKey && e.key === 's'){
         e.preventDefault()
-        saveNote(selectedFileId)
+        saveNote(files[getFileIndex(selectedFileId)])
         console.log('trying to save')
 
     } else if(e.altKey && e.key === 'n'){
