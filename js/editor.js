@@ -1,7 +1,7 @@
 import { files, getFileIndex, idNum, currentFolderId, incrementIdNum, setSelectedFileId, setAppState } from "./state.js"
 import { getFormattedDate, updateFileData, checkForDuplicateTitles } from "./storage.js"
 import { createTab, renderTabs } from "./tabs.js"
-import { renderFolderContents } from "./filetree.js"
+import { renderFiletree } from "./filetree.js"
 
 const createNoteBtn = document.getElementById('create-note-btn')
 createNoteBtn.addEventListener('click', createNewNote)
@@ -31,7 +31,7 @@ export function saveNote(file){
     setSelectedFileId(file.id)
     setAppState('Editing')
     updateFileData()
-    renderFolderContents()
+    renderFiletree()
     renderTabs()
 }
 
@@ -54,7 +54,7 @@ export function createNewNote(){
     updateFileData()
     setSelectedFileId(id)
     setAppState('Editing')
-    renderFolderContents()
+    renderFiletree()
     return id
 }
 

@@ -1,4 +1,4 @@
-import { renderFolderContents } from './filetree.js'
+import { renderFiletree } from './filetree.js'
 import { initSearch } from './search.js'
 import { initShortcuts } from './shortcuts.js'
 import { initNavBar } from './navbar.js'
@@ -8,5 +8,5 @@ import { createDefaultTab } from './tabs.js'
 initSearch()
 initShortcuts()
 initNavBar()
-renderFolderContents()
+renderFiletree()
 createDefaultTab()

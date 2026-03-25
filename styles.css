@@ -1,7 +1,8 @@
 :root {
-    --primary: #333333;
+    --primary: #1C1C1C;
     --secondary: #262824;
-    --tertiary: #0c0c0c;
+    --tertiary: #333333;
+    --grey-accent: gray;
     --accent: #fcb900;
     --accent-hover: #FFF51F;
     --border-radius: 5px;
@@ -40,6 +41,7 @@ input:focus {
     list-style: none;
     display: flex;
     flex-direction: column;
+    border-right: 1px solid var(--grey-accent);
 }
 
 .nav-item {
@@ -84,6 +86,7 @@ input:focus {
     align-items: center;
     gap: 5px;
     list-style: none;
+    border-bottom: 1px solid var(--grey-accent);
 }
 .filetree-nav-item {
     height: 80%;
@@ -397,5 +400,5 @@ input:focus {
 
 .selected-file {
     border: 1px solid var(--accent);
-    background-color: var(--tertiary);
+    background-color: var(--primary);
 }

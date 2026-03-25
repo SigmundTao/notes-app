@@ -1,5 +1,5 @@
 import { highlightSelectedFile } from './editor.js';
-import { files, currentFolderId, isFileHolderOpen, toggleFileHolderState, incrementIdNum, idNum, getSelectedFileId, setSelectedFileId, setAppState, setDraggedElid, getDraggedElId, selectedFileId, openTabs, getTabIndexFromFileId } from './state.js'
+import { files, currentFolderId, isFileHolderOpen, toggleFileHolderState, incrementIdNum, idNum, getSelectedFileId, setSelectedFileId, setAppState, setDraggedElid, getDraggedElId, selectedFileId, openTabs, getTabIndexFromFileId, openFolderIds } from './state.js'
 import { getFileIndex, getFormattedDate, updateFileData } from './storage.js'
 import { openFile, checkIfTabExists, deleteTab } from './tabs.js';
 export const fileTreeEl = document.getElementById('filetree');
@@ -7,30 +7,36 @@ const fileTreeContainerEl = document.getElementById('files-container')
 const createNoteBtn = document.getElementById('create-note-btn');
 const createFolderBtn = document.getElementById('create-folder-btn')
 
-export function renderFolderContents(){
+ export function renderFiletree(){
     fileTreeContainerEl.innerHTML = ''
     files.forEach(file => {
         if(file.parentId) return
-        const card = file.type === 'folder' ? renderFolder(file) : renderFile(file)
-        fileTreeContainerEl.appendChild(card)
-    })  
+        if(file.type === 'folder'){
+            renderFolder(file, 0)
+        } else {
+            fileTreeContainerEl.appendChild(renderFile(file))
+        }
+    })
     highlightSelectedFile(selectedFileId)
 }
 
-function renderFolder(folder){
+function renderFolder(folder, depth = 0){
     const folderCard = new FileCard(folder)
+    folderCard.element.style.paddingLeft = `${depth * 12}px`
+    fileTreeContainerEl.appendChild(folderCard.element)
+    
+    if(!openFolderIds.has(folder.id)) return
+    
     const folderContents = files.filter(f => f.parentId === folder.id)
-    const folderContentsHolder = folderCard.element.querySelector('.folder-contents')
-    folderCard.element.appendChild(folderContentsHolder)
-    const paddingLeft = Number(folderCard.element.style.paddingLeft.split('px')[0])
-
     folderContents.forEach(file => {
-        const childCard = file.type === 'folder' ? renderFolder(file) : renderFile(file)
-        childCard.style.paddingLeft = `${paddingLeft + 10}px`
-        folderContentsHolder.appendChild(childCard)
+        if(file.type === 'folder'){
+            renderFolder(file, depth + 1)
+        } else {
+            const card = renderFile(file)
+            card.style.paddingLeft = `${(depth + 1) * 12}px`
+            fileTreeContainerEl.appendChild(card)
+        }
     })
-
-    return folderCard.element
 }
 
 function renderFile(file){
@@ -61,17 +67,17 @@ class FileCard {
         `
         card.appendChild(fileCardHeader)
         
-        if(this.file.type === 'note'){
-            card.addEventListener('click', () => openFile(this.id))
-        } else if(this.file.type === 'folder'){
+        if(this.file.type === 'folder'){
             this.addDropListener(card)
             card.classList.add('folder')
-            const contentsHolder = document.createElement('div')
-            contentsHolder.classList.add('folder-contents')
-            contentsHolder.classList.add('showing-contents')
-            card.appendChild(contentsHolder)
             fileCardHeader.addEventListener('click', () => {
-                contentsHolder.classList.toggle('showing-contents')
+                if(openFolderIds.has(this.id)){
+                    openFolderIds.delete(this.id)
+                    renderFiletree()
+                } else if(!openFolderIds.has(this.id)){
+                    openFolderIds.add(this.id)
+                    renderFiletree()
+                }
             })
         }
         return card
@@ -122,7 +128,7 @@ function drop(e){
     draggedFile.parentId = targetId
     setDraggedElid(null)
     updateFileData()
-    renderFolderContents()
+    renderFiletree()
 }
 
 function isDescendant(draggedId, targetId){
@@ -158,7 +164,7 @@ export function createFolder(){
             if(input.value.trim() === '') return
             saveFolder()
             removeTempFile()
-            renderFolderContents()
+            renderFiletree()
         }
     })
 }
@@ -197,8 +203,8 @@ export function closeFileHolder(){
 }
 
 export function toggleFileHolder(){
-    toggleFileHolderState()
     isFileHolderOpen ? closeFileHolder() : openFileHolder()
+    toggleFileHolderState()
 }
 
 function createRightClickMenu(posX, posY, file){
@@ -227,12 +233,12 @@ function createRightClickMenu(posX, posY, file){
 export function deleteFile(id){
     files.splice(getFileIndex(id), 1)
     updateFileData()
-    renderFolderContents()
+    renderFiletree()
     if(id === getSelectedFileId()){
         setSelectedFileId(null)
         setAppState('Idle')
     }
-    if(checkIfTabExists() !== -1){
+    if(checkIfTabExists(id) !== -1){
         deleteTab(openTabs[getTabIndexFromFileId(id)].id)
     }
 }

@@ -6,7 +6,8 @@ export let currentTabId = null
 export let draggedElId = null
 export let idNum = files.length > 0 ? Math.max(...files.map(n => n.id)) + 1 : 1
 export const appStates = ['Idle', 'Editing', 'Creating']
-export let isFileHolderOpen = false
+export let isFileHolderOpen = true
+export const openFolderIds = new Set()
 
 /// Tabs
 export const openTabs = []
