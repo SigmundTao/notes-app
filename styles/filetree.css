@@ -87,19 +87,19 @@
 
 :root.yuki {
     --bg-primary: #f8fafc;
-    --bg-secondary: #f0f4f8;
-    --bg-tertiary: #e8eef4;
-    --gold: #7a96b0;
-    --gold-subtle: rgba(122, 150, 176, 0.1);
-    --border-tertiary: rgba(122, 150, 176, 0.08);
-    --border-secondary: rgba(122, 150, 176, 0.14);
-    --border-default: rgba(122, 150, 176, 0.25);
-    --border-strong: rgba(122, 150, 176, 0.5);
+    --bg-secondary: #eef3f8;
+    --bg-tertiary: #e2ecf4;
+    --gold: #5a86a8;
+    --gold-subtle: rgba(90, 134, 168, 0.12);
+    --border-tertiary: rgba(90, 134, 168, 0.1);
+    --border-secondary: rgba(90, 134, 168, 0.18);
+    --border-default: rgba(90, 134, 168, 0.3);
+    --border-strong: rgba(90, 134, 168, 0.55);
     --font-primary: #1a2430;
-    --font-secondary: #5a7080;
-    --font-tertiary: #9ab0c0;
-    --highlight: rgba(122, 150, 176, 0.15);
-    --caret: #7a96b0;
+    --font-secondary: #4a6878;
+    --font-tertiary: #8aaabb;
+    --highlight: rgba(90, 134, 168, 0.18);
+    --caret: #5a86a8;
 }
 
 #filetree {
