@@ -2,7 +2,7 @@ import { openTabs, setCurrentTabId, tabId, currentTabId, getTabIndex, getTabInde
 import { checkForDuplicateTitles, getFileIndex } from "./storage.js"
 import { highlightSelectedFile, getTitleInput, getBodyInput, saveNote } from "./editor.js"
 import { deleteFile } from "./filetree.js"
-import { marked } from 'https://cdn.jsdelivr.net/npm/marked/+esm'
+import { marked } from './markdown.js'
 
 const currentTabEl = document.getElementById('current-tab')
 const tabBar = document.getElementById('tab-bar')
