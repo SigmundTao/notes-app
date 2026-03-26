@@ -38,6 +38,10 @@ hr {
 a {
     color: var(--accent);
 }
+
+code {
+    background-color: gray;
+}
 /* =====================
    Navigation
    ===================== */

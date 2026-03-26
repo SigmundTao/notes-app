@@ -264,7 +264,7 @@ function createDeleteBtn(toBeDeleted, menu){
     return deleteBtn
 }
 
-window.addEventListener('contextmenu', (event) => {
+fileTreeContainerEl.addEventListener('contextmenu', (event) => {
     event.preventDefault()
     const eventTarget = event.target
 
