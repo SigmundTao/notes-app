@@ -21,6 +21,7 @@
 body {
     margin: 0;
     color: white;
+    overflow: hidden;
 }
 main {
     display: flex;
@@ -28,6 +29,10 @@ main {
 
 input:focus {
     outline: none;
+}
+
+hr {
+    width: 100%;
 }
 /* =====================
    Navigation
@@ -71,7 +76,7 @@ input:focus {
 }
 
 #filetree.closed {
-    width: 1px;
+    width: 0px;
     overflow: hidden;
 }
 
@@ -214,7 +219,7 @@ input:focus {
 
 #tab-bar {
     background-color: var(--tertiary);
-    height: 50px;
+    height: 40px;
     width: 100%;
     padding: 0;
     margin: 0;
@@ -223,12 +228,14 @@ input:focus {
     align-items: end;
     justify-content: flex-start;
     border-bottom: 1px solid var(--accent);
+    position: relative;
+    z-index: 100;
 }
 
 .tab-card {
     background-color: var(--secondary);
     width: 150px;
-    height: 75%;
+    height: 80%;
     border-top-right-radius: var(--border-radius);
     border-top-left-radius: var(--border-radius);
     display: flex;
@@ -236,6 +243,7 @@ input:focus {
     justify-content: space-between;
     padding: 10px;
     border-bottom: green;
+    font-size: 0.8rem;
 }
 
 .tab-card:hover {cursor: pointer;}
@@ -267,6 +275,24 @@ input:focus {
 #current-tab {
     height: calc(100vh - 50px);
     border: 1px solid var(--accent);
+    position: relative;
+}
+
+.persistent-title {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 100%;
+    background-color: var(--primary);
+    transform: translateX(-50%);
+    font-size: 0.9rem;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #6b6b6b;
+    z-index: 10;
+    pointer-events: none;
 }
 
 /* =====================
@@ -372,6 +398,8 @@ input:focus {
     width: 100%;
     display: flex;
     flex-direction: column;
+    position: relative;
+    overflow-y: scroll;
 }
 
 .note-title {
@@ -379,9 +407,12 @@ input:focus {
     background-color: var(--primary);
     color: var(--font-color);
     font-size: 1.5rem;
-    padding: 15px;
+    padding-left: 50px;
+    padding-top: 10px;
     border: none;
 }
+
+
 
 .note-body {
     height: calc(100% - 100px);
@@ -389,7 +420,9 @@ input:focus {
     border: none;
     color: var(--font-color);
     font-size: 1rem;
-    padding: 15px;
+    padding: 50px;
+    padding-top: 0;
+    flex-direction: column;
 }
 
 .note-body:focus {
@@ -402,7 +435,7 @@ input:focus {
 }
 
 .count-holder {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     right: 0;
     border: 1px solid var(--grey-accent);

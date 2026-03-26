@@ -159,6 +159,10 @@ function createNoteView(file){
     titleInput.classList.add('note-title')
     titleInput.value = file.title
 
+    const persistentTitle = document.createElement('div')
+    persistentTitle.textContent = titleInput.value
+    persistentTitle.classList.add('persistent-title')
+
     const noteContentInput = document.createElement('textarea')
     noteContentInput.classList.add('note-body')
     noteContentInput.value = file.body
@@ -176,7 +180,9 @@ function createNoteView(file){
     tab.appendChild(markdownDisplay)
     tab.appendChild(countHolder)
     currentTabEl.appendChild(tab)
+    currentTabEl.appendChild(persistentTitle)
     updateCountHolder(countHolder, file)
+    switchToDisplayMode(noteContentInput, markdownDisplay)
 
     titleInput.addEventListener('keydown', (e) => {
         if(e.key === 'Enter'){
