@@ -267,12 +267,11 @@ function createDeleteBtn(toBeDeleted, menu){
 fileTreeContainerEl.addEventListener('contextmenu', (event) => {
     event.preventDefault()
     const eventTarget = event.target
-
-    if(!eventTarget.classList.contains('file-card')
-    && !eventTarget.parentElement.classList.contains('file-card')) return
+    const file = eventTarget.closest('.file-card')
+    if(!file) return
+    
     document.querySelector('.right-click-menu')?.remove()
 
-    const file = eventTarget.closest('.file-card')
     const menu = createRightClickMenu(event.clientX, event.clientY, files[getFileIndex(Number(file.id))])
     fileTreeEl.appendChild(menu)
     menu.addEventListener('click', (e) => e.stopPropagation())
