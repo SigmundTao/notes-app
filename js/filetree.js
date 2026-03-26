@@ -7,6 +7,11 @@ const fileTreeContainerEl = document.getElementById('files-container')
 const createNoteBtn = document.getElementById('create-note-btn');
 const createFolderBtn = document.getElementById('create-folder-btn')
 
+fileTreeContainerEl.addEventListener('dragenter', dragEnter)
+fileTreeContainerEl.addEventListener('dragover', dragOver)
+fileTreeContainerEl.addEventListener('dragleave', dragLeave)
+fileTreeContainerEl.addEventListener('drop', drop)
+
  export function renderFiletree(){
     fileTreeContainerEl.innerHTML = ''
     files.forEach(file => {
@@ -125,7 +130,11 @@ function drop(e){
     const draggedFile = files[getFileIndex(draggedId)]
     if(!draggedFile) return
     
-    draggedFile.parentId = targetId
+    if(e.currentTarget.id === 'files-container'){
+        draggedFile.parentId = null
+    } else {
+        draggedFile.parentId = targetId
+    }
     setDraggedElid(null)
     updateFileData()
     renderFiletree()

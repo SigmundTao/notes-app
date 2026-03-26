@@ -2,5 +2,5 @@
 
 [x] Auto save on body input
 [ ] Add markdown rendering
-[ ] Add Word and character count
-[ ] Add dragging notes out of folders
+[x] Add Word and character count
+[x] Add dragging notes out of folders

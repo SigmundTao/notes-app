@@ -165,8 +165,6 @@ input:focus {
 }
 
 .drag-over {
-    background-color: var(--hover);
-    outline: 1px solid var(--accent);
 }
 
 .temp {
