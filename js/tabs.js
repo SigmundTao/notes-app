@@ -181,7 +181,7 @@ function createNoteView(file){
     tab.appendChild(countHolder)
     currentTabEl.appendChild(tab)
     currentTabEl.appendChild(persistentTitle)
-    updateCountHolder(countHolder, file)
+    updateCountHolder(countHolder, file, currentNoteMode)
     switchToDisplayMode(noteContentInput, markdownDisplay)
 
     titleInput.addEventListener('keydown', (e) => {
@@ -233,10 +233,23 @@ function switchToEditMode(bodyInput, markdownDiv){
     setCurrentNoteMode('edit')
 }
 
-function updateCountHolder(holder, file){
+export function updateCountHolder(holder, file, currentNoteMode){
+    let imgClass;
+
+    if(currentNoteMode === 'display') imgClass = 'display-mode'
+    else imgClass = 'edit-mode'
+
+    console.log(imgClass)
+
     holder.innerHTML = `
+        <div class="note-mode-img ${imgClass}" ></div>
         <div class="word-count">${getWordCount(file)} Words</div>
         <div class="char-count">${getCharacterCount(file)} Characters</div>`
+    console.log('imgClass at render time:', imgClass)
+}
+
+export function getCountHolder(){
+    return document.querySelector('.count-holder')
 }
 
 function getWordCount(file){

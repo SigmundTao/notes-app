@@ -225,6 +225,7 @@ hr {
     margin: 0;
     display: flex;
     flex-direction: row;
+    flex-wrap: nowrap;
     align-items: end;
     justify-content: flex-start;
     border-bottom: 1px solid var(--accent);
@@ -273,9 +274,10 @@ hr {
 }
 
 #current-tab {
-    height: calc(100vh - 50px);
+    height: calc(100vh - 40px);
     border: 1px solid var(--accent);
     position: relative;
+    padding-bottom: 50px;
 }
 
 .persistent-title {
@@ -447,4 +449,20 @@ hr {
     background-color: var(--secondary);
     font-size: 0.75rem;
     border-top-left-radius: var(--border-radius);
+}
+
+.note-mode-img {
+    height: 60%;
+    aspect-ratio: 1;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.note-mode-img.display-mode {
+    background-image: url('./assets/eye.svg');
+}
+
+.note-mode-img.edit-mode {
+    background-image: url('./assets/edit.svg');
 }
