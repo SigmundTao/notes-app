@@ -4,8 +4,7 @@ const themeSelectEl = document.getElementById('theme-select')
 const openSettingsBtn = document.getElementById('settings-btn')
 const savedTheme = localStorage.getItem('theme') || 'sakura'
 
-function openSettingsMenu(){
-    console.log('stuff is happening')
+export function openSettingsMenu(){
     settingEl.showModal()
 }
 

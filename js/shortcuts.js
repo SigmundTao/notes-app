@@ -5,6 +5,7 @@ import { openSearchMenu } from './search.js'
 import { createFolder, fileTreeEl } from './filetree.js'
 import {createDefaultTab, getCountHolder, openFile, toggleNoteMode, updateCountHolder } from './tabs.js'
 import { createQuickCaputeEl } from './quickcapture.js'
+import { openSettingsMenu } from './settings.js'
 
 export function initShortcuts(){
     window.addEventListener('keydown', handleKeydown)
@@ -60,5 +61,8 @@ function handleKeydown(e){
     } else if(e.altKey && e.key === 'q'){
         e.preventDefault()
         createQuickCaputeEl()
+    } else if(e.altKey && e.key === 'm'){
+        e.preventDefault()
+        openSettingsMenu()
     }
 }
